@@ -2,9 +2,9 @@ import { gql } from "@apollo/client";
 
 export const PersonalData = gql`
   query Query {
-    getdata {
+    getData {
       name
-      age
+      email
     }
   }
 `;

@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { PersonalData } from "./shared/api/apollo-client/Graphql/testquery";
+import { PersonalData } from "./shared/api/apollo-client/Graphql/testQuery";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -9,7 +9,7 @@ function App() {
 
   return (
     <>
-      <div>
+      <div className="header">
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -18,13 +18,18 @@ function App() {
         </a>
       </div>
 
-      {error && <p>Error: {error.message}</p>}
-      {data && (
-        <div>
-          <h1>Name: {data.getdata.name}</h1>
-          <h2>Age: {data.getdata.age}</h2>
-        </div>
-      )}
+      <div className="content">
+        {error && <p className="error-message">Error: {error.message}</p>}
+        {data && (
+          <div>
+            <h1 className="user-title">User:</h1>
+            <h2 className="user-label">Name:</h2>
+            <p className="user-value">{data.getData.name}</p>
+            <h2 className="user-label">Email:</h2>
+            <p className="user-value">{data.getData.email}</p>
+          </div>
+        )}
+      </div>
     </>
   );
 }

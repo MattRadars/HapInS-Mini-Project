@@ -2,21 +2,21 @@ import { Query, Resolver } from '@nestjs/graphql';
 import { ObjectType, Field } from '@nestjs/graphql';
 
 @ObjectType()
-class PersonalData {
+class User {
   @Field()
   name: string;
 
   @Field()
-  age: number;
+  email: string;
 }
 
 @Resolver()
 export class AppResolver {
-  @Query(() => PersonalData)
-  getdata(): PersonalData {
+  @Query(() => User)
+  getData(): User {
     return {
       name: 'Kienth Tan',
-      age: 23,
+      email: 'mattkienth@gmail.com',
     };
   }
 }
