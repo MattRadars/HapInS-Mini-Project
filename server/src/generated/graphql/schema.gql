@@ -1,0 +1,12 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type PersonalData {
+  age: Float!
+  name: String!
+}
+
+type Query {
+  getdata: PersonalData!
+}
