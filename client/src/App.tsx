@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useQuery } from "@apollo/client";
+import { PersonalData } from "./shared/api/apollo-client/Graphql/testquery";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const { error, data } = useQuery(PersonalData);
 
   return (
     <>
@@ -16,16 +17,14 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">This is a test</p>
+
+      {error && <p>Error: {error.message}</p>}
+      {data && (
+        <div>
+          <h1>Name: {data.getdata.name}</h1>
+          <h2>Age: {data.getdata.age}</h2>
+        </div>
+      )}
     </>
   );
 }
