@@ -4,6 +4,9 @@ import { ObjectType, Field } from '@nestjs/graphql';
 @ObjectType()
 class User {
   @Field()
+  id: number;
+
+  @Field()
   name: string;
 
   @Field()
@@ -12,11 +15,13 @@ class User {
 
 @Resolver()
 export class AppResolver {
-  @Query(() => User)
-  getData(): User {
-    return {
-      name: 'Kienth Tan',
-      email: 'mattkienth@gmail.com',
-    };
+  private users: User[] = [
+    { id: 1, name: 'Matt Tan', email: 'mattkienth@gmail.com' },
+    { id: 2, name: 'Another User', email: 'anotheruser@example.com' },
+  ];
+
+  @Query(() => [User])
+  getUsers(): User[] {
+    return this.users;
   }
 }

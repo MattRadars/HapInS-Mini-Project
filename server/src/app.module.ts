@@ -6,6 +6,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AppResolver } from './app.resolver';
+import { PrismaService } from './prisma.service';
 
 @Module({
   imports: [
@@ -20,6 +21,6 @@ import { AppResolver } from './app.resolver';
     }),
   ],
   controllers: [AppController],
-  providers: [AppResolver, AppService],
+  providers: [AppResolver, AppService, PrismaService],
 })
 export class AppModule {}

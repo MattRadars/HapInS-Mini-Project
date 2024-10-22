@@ -3,10 +3,11 @@
 # ------------------------------------------------------
 
 type Query {
-  getData: User!
+  getUsers: [User!]!
 }
 
 type User {
   email: String!
+  id: Float!
   name: String!
 }

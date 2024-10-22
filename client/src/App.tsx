@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { PersonalData } from "./shared/api/apollo-client/Graphql/testQuery";
+import Users from "./components/userList";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -22,11 +23,7 @@ function App() {
         {error && <p className="error-message">Error: {error.message}</p>}
         {data && (
           <div>
-            <h1 className="user-title">User:</h1>
-            <h2 className="user-label">Name:</h2>
-            <p className="user-value">{data.getData.name}</p>
-            <h2 className="user-label">Email:</h2>
-            <p className="user-value">{data.getData.email}</p>
+            <Users />
           </div>
         )}
       </div>
