@@ -1,4 +1,5 @@
 import { useQuery, gql } from "@apollo/client";
+import "./UserList.css";
 
 interface User {
   id: number;
@@ -19,19 +20,24 @@ const GET_USERS = gql`
 const UserList = () => {
   const { loading, error, data } = useQuery(GET_USERS);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="loader">Loading...</div>;
   if (error) {
     console.error("GraphQL Error:", error);
-    return <div>Error: {error.message}</div>;
+    return <div className="error">Error: {error.message}</div>;
   }
 
   return (
-    <div>
-      <h1>User List</h1>
+    <div className="user-list">
+      <h1 className="userTitle">Hoomans</h1>
       <ul>
         {data.getUsers.map((user: User) => (
-          <li key={user.id}>
-            {user.name} : {user.email}
+          <li key={user.id} className="user-item">
+            <div className="user-name">
+              <strong>{user.name}</strong>
+            </div>
+            <div className="user-email">
+              <span>{user.email}</span>
+            </div>
           </li>
         ))}
       </ul>

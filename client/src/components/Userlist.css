@@ -1,0 +1,49 @@
+.user-list {
+  padding: 20px;
+  background-color: #c6d0d5;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.loader {
+  text-align: center;
+  font-size: 1.5em;
+  color: black;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.user-item {
+  padding: 10px;
+  align-items: center;
+  border-bottom: 1px solid #463d3d;
+  justify-content: space-between;
+}
+
+.user-item:last-child {
+  border-bottom: none;
+}
+
+.user-name {
+  flex: 1;
+  padding-left: 10px;
+  color: black; 
+}
+
+.user-email {
+  flex: 1;
+  color: black;
+}
+
+.userTitle {
+  color: black;
+}

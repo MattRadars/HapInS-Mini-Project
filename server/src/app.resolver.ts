@@ -17,7 +17,7 @@ class User {
 export class AppResolver {
   private users: User[] = [
     { id: 1, name: 'Matt Tan', email: 'mattkienth@gmail.com' },
-    { id: 2, name: 'Another User', email: 'anotheruser@example.com' },
+    { id: 2, name: 'Bethany', email: 'bethany@gmail.com' },
   ];
 
   @Query(() => [User])
