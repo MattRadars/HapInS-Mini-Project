@@ -45,7 +45,7 @@ const UserList = () => {
         <h1 className="userTitle">Hoomans</h1>
         {/* Add User Form */}
         <form onSubmit={handleSubmit}>
-          <Field alignItems="center" label="Name" color="black" required>
+          <Field alignItems="center" label="Name" color="orange" required>
             <input
               type="text"
               placeholder=" Sam Benwick"
@@ -54,7 +54,7 @@ const UserList = () => {
               required
             />
           </Field>
-          <Field alignItems="center" label="Email" color="black" required>
+          <Field alignItems="center" label="Email" color="orange" required>
             <input
               type="email"
               placeholder="sample@gmail.com"
