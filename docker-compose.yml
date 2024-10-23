@@ -16,6 +16,8 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
   graphql-engine:
     image: hasura/graphql-engine:v2.42.0
     ports:
@@ -23,9 +25,9 @@ services:
     restart: always
     environment:
       ## postgres database to store Hasura metadata
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://kiyent:password@host.docker.internal:5432/postgres
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://kiyent:password@db:5432/MiniprojDB
       ## this env var can be used to add the above postgres database to Hasura as a data source. this can be removed/updated based on your needs
-      PG_DATABASE_URL: postgres://kiyent:password@host.docker.internal:5432/MiniprojDB
+      PG_DATABASE_URL: postgres://kiyent:password@db:5432/MiniprojDB
       ## enable the console served by server
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
       ## enable debugging mode. It is recommended to disable this in production
@@ -37,6 +39,8 @@ services:
       # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
       HASURA_GRAPHQL_METADATA_DEFAULTS: '{"backend_configs":{"dataconnector":{"athena":{"uri":"http://data-connector-agent:8081/api/v1/athena"},"mariadb":{"uri":"http://data-connector-agent:8081/api/v1/mariadb"},"mysql8":{"uri":"http://data-connector-agent:8081/api/v1/mysql"},"oracle":{"uri":"http://data-connector-agent:8081/api/v1/oracle"},"snowflake":{"uri":"http://data-connector-agent:8081/api/v1/snowflake"}}}}'
     depends_on:
+      db:
+        condition: service_started
       data-connector-agent:
         condition: service_healthy
   data-connector-agent:
