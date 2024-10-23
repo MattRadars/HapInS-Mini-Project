@@ -1,5 +1,6 @@
-import { Query, Resolver } from '@nestjs/graphql';
+import { Query, Mutation, Resolver, Args } from '@nestjs/graphql';
 import { ObjectType, Field } from '@nestjs/graphql';
+import { PrismaClient, User as PrismaUser } from '@prisma/client';
 
 @ObjectType()
 class User {
@@ -13,15 +14,39 @@ class User {
   email: string;
 }
 
-@Resolver()
+@Resolver(() => User)
 export class AppResolver {
-  private users: User[] = [
-    { id: 1, name: 'Matt Tan', email: 'mattkienth@gmail.com' },
-    { id: 2, name: 'Bethany', email: 'bethany@gmail.com' },
-  ];
+  private prisma = new PrismaClient();
 
   @Query(() => [User])
-  getUsers(): User[] {
-    return this.users;
+  async getUsers(): Promise<User[]> {
+    const users: PrismaUser[] = await this.prisma.user.findMany();
+    return users.map((user) => ({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    }));
+  }
+
+  @Mutation(() => User)
+  async addUser(
+    @Args('name') name: string,
+    @Args('email') email: string,
+  ): Promise<User> {
+    const newUser: PrismaUser = await this.prisma.user.create({
+      data: {
+        name,
+        email,
+      },
+    });
+    return {
+      id: newUser.id,
+      name: newUser.name,
+      email: newUser.email,
+    };
+  }
+
+  async onModuleDestroy() {
+    await this.prisma.$disconnect();
   }
 }

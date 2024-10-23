@@ -1,4 +1,7 @@
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
+import { useState } from "react";
+import { ADD_USER } from "../shared/api/apollo-client/Graphql/mutations/userMutation";
+import { GET_USERS } from "../shared/api/apollo-client/Graphql/queries/userQueries";
 import "./UserList.css";
 
 interface User {
@@ -7,18 +10,27 @@ interface User {
   email: string;
 }
 
-const GET_USERS = gql`
-  query GetUsers {
-    getUsers {
-      id
-      name
-      email
-    }
-  }
-`;
-
 const UserList = () => {
   const { loading, error, data } = useQuery(GET_USERS);
+  const [addUser] = useMutation(ADD_USER);
+  // const [deleteUser] = useMutation(DELETE_USER);
+  const [newUser, setNewUser] = useState({ name: "", email: "" });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    addUser({
+      variables: newUser,
+      // update cache
+      update: (cache, { data: { addUser } }) => {
+        const { getUsers } = cache.readQuery({ query: GET_USERS });
+        cache.writeQuery({
+          query: GET_USERS,
+          data: { getUsers: [...getUsers, addUser] },
+        });
+      },
+    });
+    setNewUser({ name: "", email: "" }); // Reset form
+  };
 
   if (loading) return <div className="loader">Loading...</div>;
   if (error) {
@@ -29,6 +41,26 @@ const UserList = () => {
   return (
     <div className="user-list">
       <h1 className="userTitle">Hoomans</h1>
+
+      {/* Add User Form */}
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Name"
+          value={newUser.name}
+          onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={newUser.email}
+          onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+          required
+        />
+        <button type="submit">Add User</button>
+      </form>
+
       <ul>
         {data.getUsers.map((user: User) => (
           <li key={user.id} className="user-item">
@@ -38,6 +70,8 @@ const UserList = () => {
             <div className="user-email">
               <span>{user.email}</span>
             </div>
+
+            {/* <button onClick={() => handleDelete(user.id)}>Delete</button> */}
           </li>
         ))}
       </ul>
