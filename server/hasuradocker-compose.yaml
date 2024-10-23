@@ -1,21 +1,11 @@
 services:
-  # app:
-  #   build: .
-  #   ports:
-  #     - "5173:5173"
-  #   depends_on:
-  #     - db
-  #   environment:
-  #     - DATABASE_URL=postgresql://user:password@db:5432/mydatabase
-
-  db:
-    image: postgres:latest
+  postgres:
+    image: postgres:15
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: MiniprojDB
-      POSTGRES_USER: kiyent
-      POSTGRES_PASSWORD: password
-    ports:
-      - "5432:5432"
+      POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
     image: hasura/graphql-engine:v2.42.0
     ports:
@@ -23,9 +13,9 @@ services:
     restart: always
     environment:
       ## postgres database to store Hasura metadata
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://kiyent:password@host.docker.internal:5432/postgres
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       ## this env var can be used to add the above postgres database to Hasura as a data source. this can be removed/updated based on your needs
-      PG_DATABASE_URL: postgres://kiyent:password@host.docker.internal:5432/MiniprojDB
+      PG_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       ## enable the console served by server
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
       ## enable debugging mode. It is recommended to disable this in production
