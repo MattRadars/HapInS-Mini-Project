@@ -1,10 +1,9 @@
 import { useQuery, useMutation } from "@apollo/client";
-import { useState } from "react";
+import { Box, Button, Table } from "@chakra-ui/react";
 import { ADD_USER } from "../shared/api/apollo-client/Graphql/mutations/userMutation";
 import { GET_USERS } from "../shared/api/apollo-client/Graphql/queries/userQueries";
-import { Box, Button } from "@chakra-ui/react";
-import { Field } from "../pages/ui/field";
-import "./Userlist.css";
+import Title from "./title";
+import RegisterUser from "./registerUser";
 
 type User = {
   id: number;
@@ -15,13 +14,10 @@ type User = {
 const UserList = () => {
   const { loading, error, data } = useQuery(GET_USERS);
   const [addUser] = useMutation(ADD_USER);
-  const [newUser, setNewUser] = useState({ name: "", email: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleUserSubmit = (newUser: { name: string; email: string }) => {
     addUser({
       variables: newUser,
-      // update cache
       update: (cache, { data: { addUser } }) => {
         const { getUsers } = cache.readQuery({ query: GET_USERS });
         cache.writeQuery({
@@ -30,7 +26,6 @@ const UserList = () => {
         });
       },
     });
-    setNewUser({ name: "", email: "" }); // Reset form
   };
 
   if (loading) return <div className="loader">Loading...</div>;
@@ -40,48 +35,32 @@ const UserList = () => {
   }
 
   return (
-    <Box bgGradient="to-r" gradientFrom="black" gradientTo="blue.200">
-      <div className="user-list">
-        <h1 className="userTitle">Hoomans</h1>
-        {/* Add User Form */}
-        <form onSubmit={handleSubmit}>
-          <Field alignItems="center" label="Name" color="orange" required>
-            <input
-              type="text"
-              placeholder=" Sam Benwick"
-              value={newUser.name}
-              onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
-              required
-            />
-          </Field>
-          <Field alignItems="center" label="Email" color="orange" required>
-            <input
-              type="email"
-              placeholder="sample@gmail.com"
-              value={newUser.email}
-              onChange={(e) =>
-                setNewUser({ ...newUser, email: e.target.value })
-              }
-              required
-            />
-          </Field>
-          <Button marginTop="10px" marginBottom="20px" size="xs" type="submit">
-            Add User
-          </Button>
-        </form>
-
-        <ul>
-          {data.getUsers.map((user: User) => (
-            <li key={user.id} className="user-item">
-              <div className="user-name">
-                <strong>{user.name}</strong>
-              </div>
-              <div className="user-email">
-                <span>{user.email}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
+    <Box bgGradient="to-r" gradientFrom="white" gradientTo="white" rounded="md">
+      <div>
+        <Title />
+        <RegisterUser onSubmit={handleUserSubmit} />
+        <Table.ScrollArea borderWidth="1px" rounded="md" height="320px">
+          <Table.Root stickyHeader>
+            <Table.Header>
+              <Table.Row bg="bg.subtle">
+                <Table.ColumnHeader>Name</Table.ColumnHeader>
+                <Table.ColumnHeader>Email</Table.ColumnHeader>
+                <Table.ColumnHeader textAlign="end">Actions</Table.ColumnHeader>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {data.getUsers.map((user: User) => (
+                <Table.Row key={user.id} color="black">
+                  <Table.Cell>{user.name}</Table.Cell>
+                  <Table.Cell>{user.email}</Table.Cell>
+                  <Table.Cell textAlign="end">
+                    <Button>Delete</Button>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+        </Table.ScrollArea>
       </div>
     </Box>
   );
