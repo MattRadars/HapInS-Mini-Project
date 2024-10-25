@@ -1,6 +1,9 @@
 import { useQuery, useMutation } from "@apollo/client";
 import { Box, Button, Center, Table } from "@chakra-ui/react";
-import { ADD_USER } from "../shared/api/apollo-client/Graphql/mutations/userMutation";
+import {
+  ADD_USER,
+  DELETE_USER,
+} from "../shared/api/apollo-client/Graphql/mutations/userMutation";
 import { GET_USERS } from "../shared/api/apollo-client/Graphql/queries/userQueries";
 import Title from "./title";
 import RegisterUser from "./registerUser";
@@ -14,8 +17,10 @@ type User = {
 const UserList = () => {
   const { loading, error, data } = useQuery(GET_USERS);
   const [addUser] = useMutation(ADD_USER);
+  const [deleteUser] = useMutation(DELETE_USER);
 
   const handleUserSubmit = (newUser: { name: string; email: string }) => {
+    // Add User
     addUser({
       variables: newUser,
       update: (cache, { data: { addUser } }) => {
@@ -26,6 +31,33 @@ const UserList = () => {
         });
       },
     });
+  };
+
+  // Delete User
+  const handleDeleteUser = async (id: number) => {
+    try {
+      await deleteUser({
+        variables: { id },
+        update: (cache, { data }) => {
+          if (data && data.deleteUser) {
+            const existingUsers = cache.readQuery<{ getUsers: User[] }>({
+              query: GET_USERS,
+            });
+            if (existingUsers) {
+              const newUsers = existingUsers.getUsers.filter(
+                (user) => user.id !== id
+              );
+              cache.writeQuery({
+                query: GET_USERS,
+                data: { getUsers: newUsers },
+              });
+            }
+          }
+        },
+      });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
   };
 
   if (loading) return <div className="loader">Loading...</div>;
@@ -54,7 +86,9 @@ const UserList = () => {
                   <Table.Cell>{user.name}</Table.Cell>
                   <Table.Cell>{user.email}</Table.Cell>
                   <Table.Cell>
-                    <Button>Delete</Button>
+                    <Button onClick={() => handleDeleteUser(user.id)}>
+                      Delete
+                    </Button>
                   </Table.Cell>
                 </Table.Row>
               ))}

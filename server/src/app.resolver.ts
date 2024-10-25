@@ -56,6 +56,19 @@ export class AppResolver {
     }
   }
 
+  @Mutation(() => Boolean)
+  async deleteUser(@Args('id') id: number): Promise<boolean> {
+    try {
+      await this.prisma.user.delete({
+        where: { id },
+      });
+      return true;
+    } catch (error) {
+      console.error(error);
+      throw new ApolloError('Failed to delete user');
+    }
+  }
+
   async onModuleDestroy() {
     await this.prisma.$disconnect();
   }

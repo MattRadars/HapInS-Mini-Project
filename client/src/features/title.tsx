@@ -5,9 +5,9 @@ const Title = () => {
     <Text
       fontSize="3xl"
       fontWeight="bold"
-      color="teal.500"
+      color="tomato"
       textAlign="center"
-      mb={4}
+      marginTop="20px"
     >
       Hoomans
     </Text>
