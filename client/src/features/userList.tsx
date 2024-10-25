@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "@apollo/client";
-import { Box, Button, Table } from "@chakra-ui/react";
+import { Box, Button, Center, Table } from "@chakra-ui/react";
 import { ADD_USER } from "../shared/api/apollo-client/Graphql/mutations/userMutation";
 import { GET_USERS } from "../shared/api/apollo-client/Graphql/queries/userQueries";
 import Title from "./title";
@@ -35,8 +35,8 @@ const UserList = () => {
   }
 
   return (
-    <Box bgGradient="to-r" gradientFrom="white" gradientTo="white" rounded="md">
-      <div>
+    <Center bg="tomato" height="100vh">
+      <Box bg="white" rounded="md">
         <Title />
         <RegisterUser onSubmit={handleUserSubmit} />
         <Table.ScrollArea borderWidth="1px" rounded="md" height="320px">
@@ -45,7 +45,7 @@ const UserList = () => {
               <Table.Row bg="bg.subtle">
                 <Table.ColumnHeader>Name</Table.ColumnHeader>
                 <Table.ColumnHeader>Email</Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="end">Actions</Table.ColumnHeader>
+                <Table.ColumnHeader>Actions</Table.ColumnHeader>
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -53,7 +53,7 @@ const UserList = () => {
                 <Table.Row key={user.id} color="black">
                   <Table.Cell>{user.name}</Table.Cell>
                   <Table.Cell>{user.email}</Table.Cell>
-                  <Table.Cell textAlign="end">
+                  <Table.Cell>
                     <Button>Delete</Button>
                   </Table.Cell>
                 </Table.Row>
@@ -61,8 +61,8 @@ const UserList = () => {
             </Table.Body>
           </Table.Root>
         </Table.ScrollArea>
-      </div>
-    </Box>
+      </Box>
+    </Center>
   );
 };
 

@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import { ApolloProvider } from "@apollo/client";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import App from "./App.tsx";
-import "./index.css";
 
 import { client } from "./shared/api/apollo-client/client.ts";
 
