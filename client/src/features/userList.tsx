@@ -1,5 +1,6 @@
 import { useQuery, useMutation } from "@apollo/client";
 import { Box, Button, Center, Table } from "@chakra-ui/react";
+import { Toaster, toaster } from "../pages/ui/toaster";
 import {
   ADD_USER,
   DELETE_USER,
@@ -68,6 +69,7 @@ const UserList = () => {
 
   return (
     <Center bg="tomato" height="100vh">
+      <Toaster />
       <Box bg="white" rounded="md">
         <Title />
         <RegisterUser onSubmit={handleUserSubmit} />
@@ -86,7 +88,15 @@ const UserList = () => {
                   <Table.Cell>{user.name}</Table.Cell>
                   <Table.Cell>{user.email}</Table.Cell>
                   <Table.Cell>
-                    <Button onClick={() => handleDeleteUser(user.id)}>
+                    <Button
+                      onClick={() => {
+                        handleDeleteUser(user.id);
+                        toaster.create({
+                          description: "User Deleted Successfully",
+                          type: "success",
+                        });
+                      }}
+                    >
                       Delete
                     </Button>
                   </Table.Cell>
