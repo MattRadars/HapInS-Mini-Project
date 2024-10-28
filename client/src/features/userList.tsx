@@ -1,69 +1,38 @@
-import { useQuery, useMutation } from "@apollo/client";
 import { Box, Button, Center, Table } from "@chakra-ui/react";
 import { Toaster, toaster } from "../pages/ui/toaster";
-import {
-  ADD_USER,
-  DELETE_USER,
-} from "../shared/api/apollo-client/Graphql/mutations/userMutation";
-import { GET_USERS } from "../shared/api/apollo-client/Graphql/queries/userQueries";
 import Title from "./title";
 import RegisterUser from "./registerUser";
-
-type User = {
-  id: number;
-  name: string;
-  email: string;
-};
+import {
+  useAddUserMutation,
+  useDeleteUserMutation,
+  useGetUsersQuery,
+} from "../shared/api/apollo-client/generated/hooks";
 
 const UserList = () => {
-  const { loading, error, data } = useQuery(GET_USERS);
-  const [addUser] = useMutation(ADD_USER);
-  const [deleteUser] = useMutation(DELETE_USER);
+  const { loading, error, data } = useGetUsersQuery();
+  const [addUser] = useAddUserMutation();
+  const [deleteUser] = useDeleteUserMutation();
 
   const handleUserSubmit = (newUser: { name: string; email: string }) => {
     // Add User
     addUser({
-      variables: newUser,
-      update: (cache, { data: { addUser } }) => {
-        const { getUsers } = cache.readQuery({ query: GET_USERS });
-        cache.writeQuery({
-          query: GET_USERS,
-          data: { getUsers: [...getUsers, addUser] },
-        });
-      },
+      variables: { users: newUser },
+      refetchQueries: ["GetUsers"],
     });
   };
 
   // Delete User
   const handleDeleteUser = async (id: number) => {
-    try {
-      await deleteUser({
-        variables: { id },
-        update: (cache, { data }) => {
-          if (data && data.deleteUser) {
-            const existingUsers = cache.readQuery<{ getUsers: User[] }>({
-              query: GET_USERS,
-            });
-            if (existingUsers) {
-              const newUsers = existingUsers.getUsers.filter(
-                (user) => user.id !== id
-              );
-              cache.writeQuery({
-                query: GET_USERS,
-                data: { getUsers: newUsers },
-              });
-            }
-          }
-        },
-      });
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
+    await deleteUser({
+      variables: { id: { id: { _eq: id } } },
+      refetchQueries: ["GetUsers"],
+    });
   };
 
   if (loading) return <div className="loader">Loading...</div>;
   if (error) {
     console.error("GraphQL Error:", error);
+    console.log(data);
     return <div className="error">Error: {error.message}</div>;
   }
 
@@ -83,7 +52,7 @@ const UserList = () => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {data.getUsers.map((user: User) => (
+              {data?.User.map((user) => (
                 <Table.Row key={user.id} color="black">
                   <Table.Cell>{user.name}</Table.Cell>
                   <Table.Cell>{user.email}</Table.Cell>

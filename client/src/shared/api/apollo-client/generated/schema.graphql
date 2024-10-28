@@ -1,0 +1,621 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+"""
+whether this query should be cached (Hasura Cloud only)
+"""
+directive @cached(
+  """
+  refresh the cache entry
+  """
+  refresh: Boolean! = false
+  """
+  measured in seconds
+  """
+  ttl: Int! = 60
+) on QUERY
+
+"""
+Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+"""
+Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  """
+  does the column match the given case-insensitive pattern
+  """
+  _ilike: String
+  _in: [String!]
+  """
+  does the column match the given POSIX regular expression, case insensitive
+  """
+  _iregex: String
+  _is_null: Boolean
+  """
+  does the column match the given pattern
+  """
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  """
+  does the column NOT match the given case-insensitive pattern
+  """
+  _nilike: String
+  _nin: [String!]
+  """
+  does the column NOT match the given POSIX regular expression, case insensitive
+  """
+  _niregex: String
+  """
+  does the column NOT match the given pattern
+  """
+  _nlike: String
+  """
+  does the column NOT match the given POSIX regular expression, case sensitive
+  """
+  _nregex: String
+  """
+  does the column NOT match the given SQL regular expression
+  """
+  _nsimilar: String
+  """
+  does the column match the given POSIX regular expression, case sensitive
+  """
+  _regex: String
+  """
+  does the column match the given SQL regular expression
+  """
+  _similar: String
+}
+
+"""
+columns and relationships of "User"
+"""
+type User {
+  email: String!
+  id: Int!
+  name: String
+}
+
+"""
+aggregated selection of "User"
+"""
+type User_aggregate {
+  aggregate: User_aggregate_fields
+  nodes: [User!]!
+}
+
+"""
+aggregate fields of "User"
+"""
+type User_aggregate_fields {
+  avg: User_avg_fields
+  count(columns: [User_select_column!], distinct: Boolean): Int!
+  max: User_max_fields
+  min: User_min_fields
+  stddev: User_stddev_fields
+  stddev_pop: User_stddev_pop_fields
+  stddev_samp: User_stddev_samp_fields
+  sum: User_sum_fields
+  var_pop: User_var_pop_fields
+  var_samp: User_var_samp_fields
+  variance: User_variance_fields
+}
+
+"""
+aggregate avg on columns
+"""
+type User_avg_fields {
+  id: Float
+}
+
+"""
+Boolean expression to filter rows from the table "User". All fields are combined with a logical 'AND'.
+"""
+input User_bool_exp {
+  _and: [User_bool_exp!]
+  _not: User_bool_exp
+  _or: [User_bool_exp!]
+  email: String_comparison_exp
+  id: Int_comparison_exp
+  name: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "User"
+"""
+enum User_constraint {
+  """
+  unique or primary key constraint on columns "email"
+  """
+  User_email_key
+  """
+  unique or primary key constraint on columns "id"
+  """
+  User_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "User"
+"""
+input User_inc_input {
+  id: Int
+}
+
+"""
+input type for inserting data into table "User"
+"""
+input User_insert_input {
+  email: String
+  id: Int
+  name: String
+}
+
+"""
+aggregate max on columns
+"""
+type User_max_fields {
+  email: String
+  id: Int
+  name: String
+}
+
+"""
+aggregate min on columns
+"""
+type User_min_fields {
+  email: String
+  id: Int
+  name: String
+}
+
+"""
+response of any mutation on the table "User"
+"""
+type User_mutation_response {
+  """
+  number of rows affected by the mutation
+  """
+  affected_rows: Int!
+  """
+  data from the rows affected by the mutation
+  """
+  returning: [User!]!
+}
+
+"""
+on_conflict condition type for table "User"
+"""
+input User_on_conflict {
+  constraint: User_constraint!
+  update_columns: [User_update_column!]! = []
+  where: User_bool_exp
+}
+
+"""
+Ordering options when selecting data from "User".
+"""
+input User_order_by {
+  email: order_by
+  id: order_by
+  name: order_by
+}
+
+"""
+primary key columns input for table: User
+"""
+input User_pk_columns_input {
+  id: Int!
+}
+
+"""
+select columns of table "User"
+"""
+enum User_select_column {
+  """
+  column name
+  """
+  email
+  """
+  column name
+  """
+  id
+  """
+  column name
+  """
+  name
+}
+
+"""
+input type for updating data in table "User"
+"""
+input User_set_input {
+  email: String
+  id: Int
+  name: String
+}
+
+"""
+aggregate stddev on columns
+"""
+type User_stddev_fields {
+  id: Float
+}
+
+"""
+aggregate stddev_pop on columns
+"""
+type User_stddev_pop_fields {
+  id: Float
+}
+
+"""
+aggregate stddev_samp on columns
+"""
+type User_stddev_samp_fields {
+  id: Float
+}
+
+"""
+Streaming cursor of the table "User"
+"""
+input User_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: User_stream_cursor_value_input!
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input User_stream_cursor_value_input {
+  email: String
+  id: Int
+  name: String
+}
+
+"""
+aggregate sum on columns
+"""
+type User_sum_fields {
+  id: Int
+}
+
+"""
+update columns of table "User"
+"""
+enum User_update_column {
+  """
+  column name
+  """
+  email
+  """
+  column name
+  """
+  id
+  """
+  column name
+  """
+  name
+}
+
+input User_updates {
+  """
+  increments the numeric columns with given value of the filtered values
+  """
+  _inc: User_inc_input
+  """
+  sets the columns of the filtered rows to the given values
+  """
+  _set: User_set_input
+  """
+  filter the rows which have to be updated
+  """
+  where: User_bool_exp!
+}
+
+"""
+aggregate var_pop on columns
+"""
+type User_var_pop_fields {
+  id: Float
+}
+
+"""
+aggregate var_samp on columns
+"""
+type User_var_samp_fields {
+  id: Float
+}
+
+"""
+aggregate variance on columns
+"""
+type User_variance_fields {
+  id: Float
+}
+
+"""
+ordering argument of a cursor
+"""
+enum cursor_ordering {
+  """
+  ascending ordering of the cursor
+  """
+  ASC
+  """
+  descending ordering of the cursor
+  """
+  DESC
+}
+
+"""
+mutation root
+"""
+type mutation_root {
+  """
+  delete data from the table: "User"
+  """
+  delete_User(
+    """
+    filter the rows which have to be deleted
+    """
+    where: User_bool_exp!
+  ): User_mutation_response
+  """
+  delete single row from the table: "User"
+  """
+  delete_User_by_pk(id: Int!): User
+  """
+  insert data into the table: "User"
+  """
+  insert_User(
+    """
+    the rows to be inserted
+    """
+    objects: [User_insert_input!]!
+    """
+    upsert condition
+    """
+    on_conflict: User_on_conflict
+  ): User_mutation_response
+  """
+  insert a single row into the table: "User"
+  """
+  insert_User_one(
+    """
+    the row to be inserted
+    """
+    object: User_insert_input!
+    """
+    upsert condition
+    """
+    on_conflict: User_on_conflict
+  ): User
+  """
+  update data of the table: "User"
+  """
+  update_User(
+    """
+    increments the numeric columns with given value of the filtered values
+    """
+    _inc: User_inc_input
+    """
+    sets the columns of the filtered rows to the given values
+    """
+    _set: User_set_input
+    """
+    filter the rows which have to be updated
+    """
+    where: User_bool_exp!
+  ): User_mutation_response
+  """
+  update single row of the table: "User"
+  """
+  update_User_by_pk(
+    """
+    increments the numeric columns with given value of the filtered values
+    """
+    _inc: User_inc_input
+    """
+    sets the columns of the filtered rows to the given values
+    """
+    _set: User_set_input
+    pk_columns: User_pk_columns_input!
+  ): User
+  """
+  update multiples rows of table: "User"
+  """
+  update_User_many(
+    """
+    updates to execute, in order
+    """
+    updates: [User_updates!]!
+  ): [User_mutation_response]
+}
+
+"""
+column ordering options
+"""
+enum order_by {
+  """
+  in ascending order, nulls last
+  """
+  asc
+  """
+  in ascending order, nulls first
+  """
+  asc_nulls_first
+  """
+  in ascending order, nulls last
+  """
+  asc_nulls_last
+  """
+  in descending order, nulls first
+  """
+  desc
+  """
+  in descending order, nulls first
+  """
+  desc_nulls_first
+  """
+  in descending order, nulls last
+  """
+  desc_nulls_last
+}
+
+type query_root {
+  """
+  fetch data from the table: "User"
+  """
+  User(
+    """
+    distinct select on columns
+    """
+    distinct_on: [User_select_column!]
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [User_order_by!]
+    """
+    filter the rows returned
+    """
+    where: User_bool_exp
+  ): [User!]!
+  """
+  fetch aggregated fields from the table: "User"
+  """
+  User_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [User_select_column!]
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [User_order_by!]
+    """
+    filter the rows returned
+    """
+    where: User_bool_exp
+  ): User_aggregate!
+  """
+  fetch data from the table: "User" using primary key columns
+  """
+  User_by_pk(id: Int!): User
+}
+
+type subscription_root {
+  """
+  fetch data from the table: "User"
+  """
+  User(
+    """
+    distinct select on columns
+    """
+    distinct_on: [User_select_column!]
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [User_order_by!]
+    """
+    filter the rows returned
+    """
+    where: User_bool_exp
+  ): [User!]!
+  """
+  fetch aggregated fields from the table: "User"
+  """
+  User_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [User_select_column!]
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [User_order_by!]
+    """
+    filter the rows returned
+    """
+    where: User_bool_exp
+  ): User_aggregate!
+  """
+  fetch data from the table: "User" using primary key columns
+  """
+  User_by_pk(id: Int!): User
+  """
+  fetch data from the table in a streaming manner: "User"
+  """
+  User_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [User_stream_cursor_input]!
+    """
+    filter the rows returned
+    """
+    where: User_bool_exp
+  ): [User!]!
+}

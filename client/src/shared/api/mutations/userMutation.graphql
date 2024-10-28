@@ -1,0 +1,15 @@
+mutation AddUser($users: [User_insert_input!]!) {
+  insert_User(objects: $users) {
+    returning {
+      id
+      name
+      email
+    }
+  }
+}
+
+mutation DeleteUser($id: User_bool_exp!) {
+  delete_User(where: $id) {
+    affected_rows
+  }
+}
