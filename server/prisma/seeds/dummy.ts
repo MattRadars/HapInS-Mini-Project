@@ -9,6 +9,14 @@ const userData: Prisma.UserCreateInput[] = [
     name: 'Moodeng',
     email: 'moodeng@gmail.com',
   },
+  {
+    name: 'Neal',
+    email: 'nealdaseal@gmail.com',
+  },
+  {
+    name: 'Nala',
+    email: 'stompstomp@gmail.com',
+  },
 ];
 
 export const createDummy = async (prisma: PrismaClient) => {
